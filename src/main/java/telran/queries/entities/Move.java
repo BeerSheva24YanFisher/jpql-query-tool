@@ -22,6 +22,14 @@ public String toString() {
     return "Move [id=" + id + ", bulls=" + bulls + ", cows=" + cows + ", sequence=" + sequence + ", gameGamer="
             + gameGamer.id + "]";
 }
+public void setGameGamer(GameGamer gameGamer2) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setGameGamer'");
+}
+public void setSequence(String move) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setSequence'");
+}
 
 
 

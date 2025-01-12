@@ -20,9 +20,15 @@ public class GameGamer {
     Gamer gamer;
     @Column(name = "is_winner")
     boolean isWinner;
+
     @Override
     public String toString() {
         return "GameGamer [id=" + id + ", game=" + game.id + ", gamer=" + gamer.username + ", isWinner=" + isWinner + "]";
+    }
+
+    public GameGamer(Game game, Gamer gamer) {
+        this.game = game;
+        this.gamer = gamer;
     }
 
 }

@@ -1,6 +1,11 @@
 package telran.queries.entities;
 import java.time.LocalDateTime;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 @Entity
 @Table(name="game")
 public class Game {
@@ -16,6 +21,18 @@ public class Game {
     public String toString() {
         return "Game [id=" + id + ", dateTime=" + dateTime + ", isFinished=" + isFinished + ", sequence=" + sequence
                 + "]";
+    }
+    public void setFinished(boolean b) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setFinished'");
+    }
+    public void setSequence(String gameName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setSequence'");
+    }
+    public boolean isFinished() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isFinished'");
     }
 
 
