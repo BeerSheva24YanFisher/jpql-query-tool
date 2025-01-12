@@ -24,5 +24,13 @@ public class GameGamer {
     public String toString() {
         return "GameGamer [id=" + id + ", game=" + game.id + ", gamer=" + gamer.username + ", isWinner=" + isWinner + "]";
     }
+    public GameGamer() {
+
+    }
+    public GameGamer(Game game, Gamer gamer) {
+        this.game = game;
+        this.gamer = gamer;
+    }
+    
 
 }
