@@ -6,8 +6,6 @@ import java.util.List;
 
 import telran.queries.entities.Game;
 import telran.queries.entities.Gamer;
-import telran.queries.model.MoveData;
-import telran.queries.model.MoveDto;
 
 public interface BullsCowsRepository {
     Game getGame(long id);
@@ -21,10 +19,7 @@ public interface BullsCowsRepository {
 	List<Long> getGameIdsNotStarted();
 	List<String> getGameGamers(long id);
 	void createGameGamer(long gameId, String username);
-	void createGameGamerMove(MoveDto moveDto);
-	List<MoveData> getAllGameGamerMoves(long gameId, String username);
 	void setWinner(long gameId, String username);
 	boolean isWinner(long gameId, String username);
-	List<Long> getUnfinishedGamesBasedOnUser( String username, boolean gamesNotStartedFlag, boolean userJoinedFlag );
 
 }

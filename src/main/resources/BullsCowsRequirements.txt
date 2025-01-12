@@ -1,0 +1,55 @@
+Requirements of Game project
+1. TCP client server application
+2. TCP Service should run on AWS EC2 inatance
+3. The application ahould allow the uaer create game
+4. The application should allow the user to join any created game
+5. The application should allow the user to start game
+6. THe application should allow the user to run a move in the started game
+7. The application should allow the user to see all unstarted games that the user may join
+8. The application should allow the user to see all started games in which the user is a gamer
+9. The application should allow the user to see all the unstarted games in which the user is a gamer
+10. The application should allow the user to run registering (Sign up)
+11. The application should allow the user to run login with only username (Sign in)
+ Constraints:
+ 1. Game cannot be started if the game doesn't have any gamer. At least one gamer should be in a game
+ 2. Joining a game is possible only if the game has not started yet
+ 3. A user may start only unstarted games in which the user is a gamer
+ 4. A user may perform a move only in a game that has started and not finished and if the user is a gamer of the game
+ 5. A started game is finished only if an one gamer has performed move with 4 bulls
+ 6. If a gamer performs a move in a having been finished game the gamer should receive from the server an appropriate
+ message containing name of the game's winner 
+ IMplementation requirements
+ 1. Data should reside on Postgres running on an EC2 instance
+ 2. The Java interface for the Bulls Cows Service and appropriate class implementation
+ 3. The Java interface for the Bulls Cows JPA repository and appropriate class implementation
+ 4. Division on the classes with intended for separate functionality
+
+
+
+ Основные требования:
+1. Приложение должно быть построено по модели клиент-сервер с использованием протокола TCP.
+2. Сервис TCP должен работать на экземпляре AWS EC2.
+3. Приложение должно позволять пользователю создавать игру.
+4. Приложение должно позволять пользователю присоединяться к любой созданной игре.
+5. Приложение должно позволять пользователю начинать игру.
+6. Приложение должно позволять пользователю совершать ходы в начатой игре.
+7. Приложение должно позволять пользователю просматривать все не начатые игры, к которым он может присоединиться.
+8. Приложение должно позволять пользователю просматривать все начатые игры, в которых он участвует.
+9. Приложение должно позволять пользователю просматривать все не начатые игры, в которых он является участником.
+10. Приложение должно позволять пользователю зарегистрироваться (Sign up).
+11. Приложение должно позволять пользователю войти в систему, используя только имя пользователя (Sign in).
+
+Ограничения:
+1. Игра не может быть начата, если в ней нет участников. В игре должен быть хотя бы один участник.
+2. Присоединение к игре возможно только в том случае, если игра ещё не начата.
+3. Пользователь может начать только те игры, которые ещё не начаты, и только если он является участником этой игры.
+4. Пользователь может совершить ход только в игре, которая начата, не завершена и в которой он является участником.
+5. Начатая игра завершается, если один из участников совершил ход с 4 быками.
+6. Если участник совершает ход в уже завершённой игре, сервер должен отправить ему соответствующее сообщение, содержащее имя победителя игры.
+
+Требования к реализации:
+1. Данные должны храниться в Postgres, работающем на экземпляре AWS EC2.
+2. Интерфейс Java для сервиса "Быки и Коровы" и соответствующая реализация класса.
+3. Интерфейс Java для JPA-репозитория "Быки и Коровы" и соответствующая реализация класса.
+4. Разделение классов по их функциональности (например, клиентский код, серверный код, работа с данными и т. д.).
+
