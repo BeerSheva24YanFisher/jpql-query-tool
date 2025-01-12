@@ -21,8 +21,8 @@ public class BullsCowsRepositoryJpaImpl implements BullsCowsRepository {
         transaction.begin();
         try {
             Game game = new Game();
-            game.setSequence(gameName); // Добавьте метод setSequence в сущность Game
-            game.setFinished(false); // Предполагается, что метод setFinished существует
+            game.setSequence(gameName);
+            game.setFinished(false);
             em.persist(game);
             transaction.commit();
             return game;
@@ -54,8 +54,8 @@ public class BullsCowsRepositoryJpaImpl implements BullsCowsRepository {
         transaction.begin();
         try {
             Game game = getGameById(gameId);
-            game.setFinished(true); // Предполагается метод setFinished
-            em.merge(game); // Сохраняем изменения
+            game.setFinished(true);
+            em.merge(game);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
@@ -86,7 +86,7 @@ public class BullsCowsRepositoryJpaImpl implements BullsCowsRepository {
     @Override
     public boolean isGameFinished(long gameId) {
         Game game = getGameById(gameId);
-        return game.isFinished(); // Предполагается метод isFinished
+        return game.isFinished();
     }
 
     @Override
@@ -110,8 +110,8 @@ public class BullsCowsRepositoryJpaImpl implements BullsCowsRepository {
         try {
             GameGamer gameGamer = getGameGamer(gameId, username);
             Move newMove = new Move();
-            newMove.setGameGamer(gameGamer); // Предполагается метод setGameGamer
-            newMove.setSequence(move); // Предполагается метод setSequence
+            newMove.setGameGamer(gameGamer);
+            newMove.setSequence(move);
             em.persist(newMove);
             transaction.commit();
         } catch (Exception e) {

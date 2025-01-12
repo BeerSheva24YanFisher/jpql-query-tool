@@ -22,17 +22,17 @@ public class Game {
         return "Game [id=" + id + ", dateTime=" + dateTime + ", isFinished=" + isFinished + ", sequence=" + sequence
                 + "]";
     }
-    public void setFinished(boolean b) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setFinished'");
+    
+    public void setFinished(boolean isFinished) {
+        this.isFinished = isFinished;
     }
-    public void setSequence(String gameName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setSequence'");
+    
+    public void setSequence(String sequence) {
+        this.sequence = sequence;
     }
+    
     public boolean isFinished() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isFinished'");
+        return this.isFinished;
     }
 
 
