@@ -32,5 +32,25 @@ public void setSequence(String sequence) {
 }
 
 
+    public void setCows(int cows) {
+        this.cows = cows;
+    }
+
+    public void setBulls(int bulls) {
+        this.bulls = bulls;
+    }
+
+    public Move(int bulls, int cows, String sequence, GameGamer gameGamer) {
+        this.bulls = bulls;
+        this.cows = cows;
+        this.sequence = sequence;
+        this.gameGamer = gameGamer;
+    }
+
+    
+
+
+
+
 
 }

@@ -3,36 +3,22 @@ package telran.queries.repo;
 import java.util.List;
 
 import telran.queries.entities.Game;
+import telran.queries.entities.GameGamer;
 import telran.queries.entities.Gamer;
+import telran.queries.entities.Move;
 
 public interface BullsCowsRepository {
-    // Создание новой игры
-    Game createGame(String gameName);
-
-    // Присоединение игрока к игре
-    void joinGame(long gameId, String username);
-
-    // Завершение игры
-    void setGameIsFinished(long gameId);
-
-    // Получение игры по ID
+    void saveGame(Game game);
     Game getGameById(long gameId);
-
-    // Получение всех игр
-    List<Game> getAllGames();
-
-    // Получение всех игроков в игре
-    List<Gamer> getGamersByGameId(long gameId);
-
-    // Проверка, завершена ли игра
-    boolean isGameFinished(long gameId);
-
-    // Удаление игры
-    void deleteGame(long gameId);
-
-    // Добавление хода игрока в игре
-    void addMove(long gameId, String username, String move);
-
-    // Получение ходов в игре
+    void updateGame(Game game);
+    void saveGamer(Gamer gamer);
+    Gamer getGamerByUsername(String username);
+    void saveGameGamer(GameGamer gameGamer);
+    GameGamer getGameGamer(long gameId, String username);
+    void saveMove(Move move);
     List<String> getMovesByGameId(long gameId);
+    List<Game> getAllGames();
+    List<Gamer> getGamersByGameId(long gameId);
+    List<Gamer> getAllGamers();
+
 }

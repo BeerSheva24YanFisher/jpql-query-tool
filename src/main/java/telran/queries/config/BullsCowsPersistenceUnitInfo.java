@@ -50,8 +50,8 @@ public class BullsCowsPersistenceUnitInfo implements PersistenceUnitInfo{
     public DataSource getNonJtaDataSource() {
          HikariDataSource ds = new HikariDataSource();
         ds.setJdbcUrl(String.format("jdbc:postgresql://%s:5432/postgres",
-                System.getenv("POSTGRES_HOST")));
-        ds.setPassword(System.getenv("POSTGRES_PASSWORD"));
+                "16.171.22.97"));
+        ds.setPassword("12345.com");
         ds.setUsername("postgres");
         ds.setDriverClassName("org.postgresql.Driver");
         return ds;
@@ -95,7 +95,15 @@ public class BullsCowsPersistenceUnitInfo implements PersistenceUnitInfo{
 
     @Override
     public Properties getProperties() {
-        return null;
+        // Properties properties = new Properties();
+        // properties.put("jakarta.persistence.jdbc.url", "jdbc:postgresql://16.171.22.97:5432/postgres");
+        // properties.put("jakarta.persistence.jdbc.user", "postgres");
+        // properties.put("jakarta.persistence.jdbc.password", "12345.com");
+        // properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        //     properties.put("hibernate.hbm2ddl.auto", "update");
+        //     properties.put("hibernate.show_sql", "true");
+        //     properties.put("hibernate.format_sql", "true");
+        return null; //properties;
     }
 
     @Override

@@ -22,6 +22,10 @@ public class Game {
         return "Game [id=" + id + ", dateTime=" + dateTime + ", isFinished=" + isFinished + ", sequence=" + sequence
                 + "]";
     }
+
+    public long getId() {
+        return id;
+    }
     
     public void setFinished(boolean isFinished) {
         this.isFinished = isFinished;
@@ -34,6 +38,18 @@ public class Game {
     public boolean isFinished() {
         return this.isFinished;
     }
+
+    public String getSequence() {
+        return sequence;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+
+
+
 
 
 
