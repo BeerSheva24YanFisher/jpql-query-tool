@@ -121,6 +121,7 @@ public class Main {
         String username = io.readString("");
 
         if (!service.isPlayerJoined(gameId, username)) {
+            //TODO добавить проверку на то, что игра может быть завершена, или на то, что она не стартовала.
             io.writeLine("You need to join the game first.");
             return;
         }

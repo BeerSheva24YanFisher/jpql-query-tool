@@ -47,6 +47,7 @@ public class BullsCowsServiceImpl implements BullsCowsService {
                 gamer.setUsername(username);
                 gamer.setBirthdate(LocalDate.of(2004, 5, 22));
                 repository.saveGamer(gamer);
+                //TODO (логика создания юзера, если его не было раньше, с вводом даты рождения)
             }
 
             GameGamer gameGamer = new GameGamer(game, gamer);
