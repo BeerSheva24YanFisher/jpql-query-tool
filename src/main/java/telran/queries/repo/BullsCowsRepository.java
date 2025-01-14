@@ -16,9 +16,10 @@ public interface BullsCowsRepository {
     void saveGameGamer(GameGamer gameGamer);
     GameGamer getGameGamer(long gameId, String username);
     void saveMove(Move move);
-    List<String> getMovesByGameId(long gameId);
+    List<Move> getMovesByGameId(long gameId);
     List<Game> getAllGames();
     List<Gamer> getGamersByGameId(long gameId);
     List<Gamer> getAllGamers();
+    List<GameGamer> getGameGamersByGameId(long gameId);
 
 }

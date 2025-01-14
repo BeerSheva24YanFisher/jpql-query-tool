@@ -32,4 +32,13 @@ public class GameGamer {
         this.gamer = gamer;
     }
 
+    public GameGamer() {
+    }
+
+    public Gamer getGamer() {
+        return gamer;
+    }
+
+    
+
 }

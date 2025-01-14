@@ -3,6 +3,7 @@ package telran.queries.repo;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import telran.queries.entities.Game;
 import telran.queries.entities.GameGamer;
 import telran.queries.entities.Gamer;
@@ -77,17 +78,25 @@ public class BullsCowsRepositoryJpaImpl implements BullsCowsRepository {
         }
     }
 
-    @Override
-    public GameGamer getGameGamer(long gameId, String username) {
-        try {
-            return em.createQuery("SELECT gg FROM GameGamer gg WHERE gg.game.id = :gameId AND gg.gamer.username = :username", GameGamer.class)
-                    .setParameter("gameId", gameId)
-                    .setParameter("username", username)
-                    .getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
+@Override
+public GameGamer getGameGamer(long gameId, String username) {
+    if (username == null || username.isBlank()) {
+        throw new IllegalArgumentException("Username cannot be null or empty");
     }
+    try {
+        return em.createQuery(
+                "SELECT gg FROM GameGamer gg WHERE gg.game.id = :gameId AND gg.gamer.username = :username",
+                GameGamer.class)
+                .setParameter("gameId", gameId)
+                .setParameter("username", username)
+                .getSingleResult();
+    } catch (NoResultException e) {
+        return null;
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw e;
+    }
+}
 
     @Override
     public void saveMove(Move move) {
@@ -103,10 +112,10 @@ public class BullsCowsRepositoryJpaImpl implements BullsCowsRepository {
     }
 
     @Override
-    public List<String> getMovesByGameId(long gameId) {
+    public List<Move> getMovesByGameId(long gameId) {
         return em.createQuery(
-                "SELECT m.sequence FROM Move m WHERE m.gameGamer.game.id = :gameId", 
-                String.class)
+                "SELECT m FROM Move m WHERE m.gameGamer.game.id = :gameId", 
+                Move.class)
             .setParameter("gameId", gameId)
             .getResultList();
     }
@@ -128,5 +137,14 @@ public class BullsCowsRepositoryJpaImpl implements BullsCowsRepository {
     @Override
     public List<Gamer> getAllGamers() {
         return em.createQuery("SELECT g FROM Gamer g", Gamer.class).getResultList();
+    }
+
+    @Override
+    public List<GameGamer> getGameGamersByGameId(long gameId) {
+        return em.createQuery(
+                "SELECT gg FROM GameGamer gg WHERE gg.game.id = :gameId", 
+                GameGamer.class)
+            .setParameter("gameId", gameId)
+            .getResultList();
     }
 }

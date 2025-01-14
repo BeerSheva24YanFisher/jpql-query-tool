@@ -48,6 +48,17 @@ public class Game {
         this.dateTime = dateTime;
     }
 
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public Game() {
+    }
+
+
+
+    
+
 
 
 

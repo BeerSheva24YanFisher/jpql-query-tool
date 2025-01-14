@@ -1,5 +1,6 @@
 package telran.queries;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.spi.PersistenceUnitInfo;
 import telran.queries.config.BullsCowsPersistenceUnitInfo;
 import telran.queries.entities.Game;
-import telran.queries.entities.Gamer;
+import telran.queries.entities.Move;
 import telran.queries.repo.BullsCowsRepositoryJpaImpl;
 import telran.queries.service.BullsCowsService;
 import telran.queries.service.BullsCowsService.MoveResult;
@@ -28,18 +29,29 @@ public class Main {
     public static void main(String[] args) {
         createEntityManager();
         createService();
-        Menu menu = new Menu("Bulls and Cows Game", getMainMenuItems());
+        Menu menu = new Menu("Bulls and Cows Game", getUserMenu());
         menu.perform(io);
     }
 
-    private static Item[] getMainMenuItems() {
+    private static Item[] getUserMenu() {
+        return new Item[] {
+            Item.of("Create User", Main::signUp),
+            Item.of("Sign in", Main::signIn),
+            Item.ofExit()
+        };
+    }
+
+
+
+    private static Item[] getMainMenuItems(String username) {
         return new Item[] {
             Item.of("Create Game", Main::createGameWithRandomName),
-            Item.of("Start Game", Main::startGame),
-            Item.of("Join Game", Main::joinGame),
-            Item.of("Play Game", Main::playGame),
-            Item.of("View All Games", Main::viewAllGames),
-            Item.of("View All Gamers", Main::viewAllGamers),
+            Item.of("Start Game", io -> startGame(io, username)),
+            Item.of("Join Game", io -> joinGame(io,username)),
+            Item.of("Play Game", io -> playGame(io, username)),
+            Item.of("View not started games with user", io -> getNotStartedGamesWithUser(io, username)),
+            Item.of("View not started games without user", io -> getNotStartedGamesWithoutUser(io, username)),
+            Item.of("View started games with user", io -> viewStartedJoinedGames(io, username)),
             Item.ofExit()
         };
     }
@@ -63,7 +75,7 @@ public class Main {
         io.writeLine("Game created with ID: " + gameId);
     }
 
-    static void startGame(InputOutput io) {
+    static void startGame(InputOutput io, String username) {
         io.writeLine("Enter the Game ID to start:");
         String gameIdStr = io.readString("");
 
@@ -75,19 +87,25 @@ public class Main {
             return;
         }
 
+        if(service.startGame(gameId, username)){
+            io.writeLine("the game cannot be started, you must join it first");
+            return;
+        }
+
         try {
-            service.startGame(gameId);
+            service.startGame(gameId, username);
             io.writeLine("Game with ID " + gameId + " has started.");
         } catch (Exception e) {
             io.writeLine("Error: " + e.getMessage());
         }
     }
 
-    static void joinGame(InputOutput io) {
+    static void joinGame(InputOutput io, String username) {
         io.writeLine("Enter the Game ID to join:");
         String gameIdStr = io.readString("");
 
         long gameId;
+        
         try {
             gameId = Long.parseLong(gameIdStr);
         } catch (NumberFormatException e) {
@@ -95,8 +113,10 @@ public class Main {
             return;
         }
 
-        io.writeLine("Enter your username:");
-        String username = io.readString("");
+        if(!service.joinGame(gameId, username)){
+            io.writeLine("the game already started, you can not join");
+            return;
+        }
 
         try {
             service.joinGame(gameId, username);
@@ -106,7 +126,7 @@ public class Main {
         }
     }
 
-    static void playGame(InputOutput io) {
+    static void playGame(InputOutput io, String username) {
         io.writeLine("Enter the Game ID to play:");
         String gameIdStr = io.readString("");
         long gameId;
@@ -116,12 +136,8 @@ public class Main {
             io.writeLine("Invalid Game ID. Please enter a valid number.");
             return;
         }
-        
-        io.writeLine("Enter your username:");
-        String username = io.readString("");
 
-        if (!service.isPlayerJoined(gameId, username)) {
-            //TODO добавить проверку на то, что игра может быть завершена, или на то, что она не стартовала.
+        if (service.isPlayerNotJoined(gameId, username)) {
             io.writeLine("You need to join the game first.");
             return;
         }
@@ -139,48 +155,100 @@ public class Main {
     }
     
     private static void makeMove(InputOutput io, long gameId, String username) {
+        if (service.getGame(gameId).isFinished()) {
+            List<Move> moves = service.getMovesByGameId(gameId);
+            for (Move move : moves) {
+                if(move.getBulls()==4){
+                    String winnerName = move.getGameGamer().getGamer().getUsername();
+                    io.writeLine("Game finished, winner: " + winnerName);  
+                    return;
+                }
+
+            }
+            
+        }
+
         io.writeLine("Enter your move:");
         String move = io.readString("");
     
         try {
             MoveResult result = service.makeMove(gameId, username, move);
-            io.writeLine("Move result: " + result.toString());
+            io.writeLine("Move result: " + result.toString());          
         } catch (Exception e) {
             io.writeLine("Error: " + e.getMessage());
         }
     }
     
     private static void viewMoves(InputOutput io, long gameId) {
-        List<String> moves = service.getMoves(gameId);
+        List<Move> moves = service.getMovesByGameId(gameId);
         if (moves.isEmpty()) {
             io.writeLine("No moves made in this game.");
         } else {
             io.writeLine("Moves made in the game:");
-            for (String move : moves) {
-                io.writeLine(move);
+            for (Move move : moves) {
+                io.writeLine(move.getSequence());
             }
         }
     }
 
-    static void viewAllGames(InputOutput io) {
-        List<Game> games = service.getAllGames();
+    static void getNotStartedGamesWithUser(InputOutput io, String username) {
+        List<Game> games = service.NotStartedGamesWithUser(username);
         if (games.isEmpty()) {
             io.writeLine("No games available.");
         } else {
             for (Game game : games) {
-                io.writeLine("Game ID: " + game.getId() + " | Is finished: " + game.isFinished());
+                io.writeLine("Game ID: " + game.getId());
             }
         }
     }
 
-    static void viewAllGamers(InputOutput io) {
-        List<Gamer> gamers = service.getAllGamers();
-        if (gamers.isEmpty()) {
-            io.writeLine("No gamers available.");
+    static void getNotStartedGamesWithoutUser(InputOutput io, String username) {
+        List<Game> games = service.NotStartedGamesWithoutUser(username);
+        if (games.isEmpty()) {
+            io.writeLine("No games available.");
         } else {
-            for (Gamer gamer : gamers) {
-                io.writeLine("Gamer name: " + gamer.getUsername() + " | Birthdate: " + gamer.getBirthdate());
+            for (Game game : games) {
+                io.writeLine("Game ID: " + game.getId());
             }
         }
+    }
+
+    static void viewStartedJoinedGames(InputOutput io, String username) {
+        List<Game> games = service.StartedGamesWithUser(username);
+        if (games.isEmpty()) {
+            io.writeLine("No games available.");
+        } else {
+            for (Game game : games) {
+                io.writeLine("Game id: " + game.getId() + " | Finished " + game.isFinished());
+            }
+        }
+    }
+
+    private static void signUp(InputOutput io) {
+        String username = io.readString("Enter your username:");
+        if (service.getUser(username) != null) {
+            io.writeLine("A user with the same name already exists. Try a different name.");
+            return;
+        }
+        String birthDateStr = io.readString("Enter your date of birth (format: YYYY-MM-DD):");
+        LocalDate birthDate;
+        try {
+            birthDate = LocalDate.parse(birthDateStr);
+        } catch (NumberFormatException e) {
+            io.writeLine("Invalid birthdate. Please enter a valid data.");
+            return;
+        }
+        service.saveGamer(username, birthDate);
+        io.writeLine("The user has been successfully registered!");
+    }
+
+    private static void signIn(InputOutput io) {
+        String username = io.readString("Enter your username:");
+        if (service.getUser(username) == null) {
+            io.writeLine("User not found. Please register");
+            return;
+        }
+        Menu menu = new Menu("Bulls and Cows Game", getMainMenuItems(username));
+        menu.perform(io);
     }
 }

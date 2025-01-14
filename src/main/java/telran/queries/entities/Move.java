@@ -48,6 +48,27 @@ public void setSequence(String sequence) {
         this.gameGamer = gameGamer;
     }
 
+    public int getBulls() {
+        return bulls;
+    }
+
+    public GameGamer getGameGamer() {
+        return gameGamer;
+    }
+
+    public String getSequence() {
+        return sequence;
+    }
+
+    public Move() {
+    }
+
+
+
+    
+
+    
+
     
 
 

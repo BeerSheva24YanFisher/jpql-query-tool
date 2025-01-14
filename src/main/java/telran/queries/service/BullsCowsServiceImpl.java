@@ -30,45 +30,53 @@ public class BullsCowsServiceImpl implements BullsCowsService {
     }
 
     @Override
-    public void startGame(long gameId) {
+    public boolean startGame(long gameId, String username) {
         Game game = repository.getGameById(gameId);
-        if (game != null && !game.isFinished()) {
+        List<GameGamer> gameGamers = repository.getGameGamersByGameId(gameId);
+        boolean flag = false;
+        for (GameGamer gameGamer: gameGamers) {
+            if (gameGamer.getGamer().getUsername() ==username){
+                flag = true;
+            }
+            
+        }
+
+        if (game != null && !game.isFinished() && gameGamers != null && flag) {
             game.setDateTime(LocalDateTime.now());
             repository.updateGame(game);
         }
+
+        return flag;
     }
 
     @Override
-    public void joinGame(long gameId, String username) {
+    public boolean joinGame(long gameId, String username) {
         Game game = repository.getGameById(gameId);
-        if (game != null && !game.isFinished()) {
+        if (game != null && game.getDateTime()==null) {
             Gamer gamer = repository.getGamerByUsername(username);
-            if (gamer == null) {
-                gamer.setUsername(username);
-                gamer.setBirthdate(LocalDate.of(2004, 5, 22));
-                repository.saveGamer(gamer);
-                //TODO (логика создания юзера, если его не было раньше, с вводом даты рождения)
+            GameGamer gameGamer = repository.getGameGamer(gameId, username);
+            if (gameGamer == null) {
+                repository.saveGameGamer(new GameGamer(game, gamer));
             }
-
-            GameGamer gameGamer = new GameGamer(game, gamer);
-            repository.saveGameGamer(gameGamer);
         }
+
+        return game.getDateTime()!=null;
     }
 
     @Override
     public MoveResult makeMove(long gameId, String username, String move) {
         Game game = repository.getGameById(gameId);
         Gamer gamer = repository.getGamerByUsername(username);
+        GameGamer gameGamer = repository.getGameGamer(gameId, username);
         
         if (game == null || gamer == null || game.isFinished()) {
-            throw new IllegalArgumentException("Game or gamer not found, or game already finished.");
+            throw new IllegalArgumentException("Game or gamer not found");
         }
 
         String sequence = game.getSequence();
         int bulls = countBulls(sequence, move);
         int cows = countCows(sequence, move);
         
-        GameGamer gameGamer = repository.getGameGamer(gameId, username);
         Move moveEntity = new Move(bulls, cows, move, gameGamer);
         repository.saveMove(moveEntity);
 
@@ -78,14 +86,6 @@ public class BullsCowsServiceImpl implements BullsCowsService {
         }
 
         return new MoveResult(bulls, cows, move);
-    }
-
-    @Override
-    public void viewGame(long gameId) {
-        Game game = repository.getGameById(gameId);
-        if (game != null) {
-            System.out.println(game);
-        }
     }
 
     public static String generateSequence() {
@@ -118,30 +118,75 @@ public class BullsCowsServiceImpl implements BullsCowsService {
     }
 
     @Override
-    public List<Game> getAllGames() {
-        return repository.getAllGames();
-    }
-
-
-    @Override
-    public List<String> getMovesByGameId(long gameId) {
+    public List<Move> getMovesByGameId(long gameId) {
         return repository.getMovesByGameId(gameId);
     }
 
     @Override
-    public List<Gamer> getAllGamers() {
-        return repository.getAllGamers();
+    public boolean isPlayerNotJoined(long gameId, String username) {
+        return repository.getGameGamer(gameId, username)==null;
     }
 
     @Override
-    public boolean isPlayerJoined(long gameId, String username) {
-        return repository.getGameGamer(gameId, username)!=null;
+    public List<Game> getAvailableGames() {
+        return repository.getAllGames().stream()
+            .filter(game -> !game.isFinished())
+            .collect(Collectors.toList());
     }
 
     @Override
-    public List<String> getMoves(long gameId) {
-        return repository.getMovesByGameId(gameId);
+    public List<Game> getStartedGames() {
+        return repository.getAllGames().stream()
+            .filter(game -> game.getDateTime() != null)
+            .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Game> StartedGamesWithUser(String username) {
+        return repository.getAllGames().stream()
+            .filter(game -> game.getDateTime() != null)
+            .filter(game -> repository.getGamersByGameId(game.getId()).stream()
+                .anyMatch(gamer -> gamer.getUsername().equals(username)))
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Game> NotStartedGamesWithUser(String username) {
+        return repository.getAllGames().stream()
+            .filter(game -> game.getDateTime() == null)
+            .filter(game -> repository.getGamersByGameId(game.getId()).stream()
+                .anyMatch(gamer -> gamer.getUsername().equals(username)))
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Game> NotStartedGamesWithoutUser(String username) {
+        return repository.getAllGames().stream()
+            .filter(game -> game.getDateTime() == null)
+            .filter(game -> repository.getGamersByGameId(game.getId()).stream()
+                .allMatch(gamer -> !gamer.getUsername().equals(username)))
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public Gamer getUser(String username) {
+        return repository.getGamerByUsername(username);
+    }
+
+    @Override
+    public void saveGamer(String username, LocalDate birthDate) {
+        Gamer newGamer = new Gamer(username,birthDate);
+        repository.saveGamer(newGamer);
+    }
+
+    public Game getGame(long gameId){
+        return repository.getGameById(gameId);
+    }
+    
+    
+    
+
+
 
     
 
