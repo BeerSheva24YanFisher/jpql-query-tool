@@ -18,9 +18,7 @@ public interface BullsCowsService {
     Game getGame(long gameId);
     List<Move> getMovesByGameId(long gameId);
     boolean isPlayerNotJoined(long gameId, String username);
-    List<Game> getAvailableGames();
-    List<Game> getStartedGames();
-    List<Game> StartedGamesWithUser(String username); //Просмотр всех начатых игр, в которых пользователь является участником
+    List<Game> StartedGamesWithUser(String username);
     List<Game> NotStartedGamesWithUser(String username);
     List<Game> NotStartedGamesWithoutUser(String username);
 

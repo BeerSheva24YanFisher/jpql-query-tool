@@ -128,20 +128,6 @@ public class BullsCowsServiceImpl implements BullsCowsService {
     }
 
     @Override
-    public List<Game> getAvailableGames() {
-        return repository.getAllGames().stream()
-            .filter(game -> !game.isFinished())
-            .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Game> getStartedGames() {
-        return repository.getAllGames().stream()
-            .filter(game -> game.getDateTime() != null)
-            .collect(Collectors.toList());
-    }
-
-    @Override
     public List<Game> StartedGamesWithUser(String username) {
         return repository.getAllGames().stream()
             .filter(game -> game.getDateTime() != null)
