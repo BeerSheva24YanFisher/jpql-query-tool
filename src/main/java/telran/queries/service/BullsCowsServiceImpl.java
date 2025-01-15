@@ -128,7 +128,7 @@ public class BullsCowsServiceImpl implements BullsCowsService {
     }
 
     @Override
-    public List<Game> StartedGamesWithUser(String username) {
+    public List<Game> getStartedGamesWithUser(String username) {
         return repository.getAllGames().stream()
             .filter(game -> game.getDateTime() != null)
             .filter(game -> repository.getGamersByGameId(game.getId()).stream()
@@ -137,7 +137,7 @@ public class BullsCowsServiceImpl implements BullsCowsService {
     }
 
     @Override
-    public List<Game> NotStartedGamesWithUser(String username) {
+    public List<Game> getNotStartedGamesWithUser(String username) {
         return repository.getAllGames().stream()
             .filter(game -> game.getDateTime() == null)
             .filter(game -> repository.getGamersByGameId(game.getId()).stream()
@@ -146,7 +146,7 @@ public class BullsCowsServiceImpl implements BullsCowsService {
     }
 
     @Override
-    public List<Game> NotStartedGamesWithoutUser(String username) {
+    public List<Game> getNotStartedGamesWithoutUser(String username) {
         return repository.getAllGames().stream()
             .filter(game -> game.getDateTime() == null)
             .filter(game -> repository.getGamersByGameId(game.getId()).stream()

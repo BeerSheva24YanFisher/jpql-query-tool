@@ -18,15 +18,12 @@ public interface BullsCowsService {
     Game getGame(long gameId);
     List<Move> getMovesByGameId(long gameId);
     boolean isPlayerNotJoined(long gameId, String username);
-    List<Game> StartedGamesWithUser(String username);
-    List<Game> NotStartedGamesWithUser(String username);
-    List<Game> NotStartedGamesWithoutUser(String username);
-
-
-
+    List<Game> getStartedGamesWithUser(String username);
+    List<Game> getNotStartedGamesWithUser(String username);
+    List<Game> getNotStartedGamesWithoutUser(String username);
     Gamer getUser(String username);
     void saveGamer(String username, LocalDate birthDate);
-
+    
     record MoveResult(int bulls, int cows, String sequence) {}
     
 }

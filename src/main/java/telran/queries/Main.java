@@ -192,7 +192,7 @@ public class Main {
     }
 
     static void getNotStartedGamesWithUser(InputOutput io, String username) {
-        List<Game> games = service.NotStartedGamesWithUser(username);
+        List<Game> games = service.getNotStartedGamesWithUser(username);
         if (games.isEmpty()) {
             io.writeLine("No games available.");
         } else {
@@ -203,7 +203,7 @@ public class Main {
     }
 
     static void getNotStartedGamesWithoutUser(InputOutput io, String username) {
-        List<Game> games = service.NotStartedGamesWithoutUser(username);
+        List<Game> games = service.getNotStartedGamesWithoutUser(username);
         if (games.isEmpty()) {
             io.writeLine("No games available.");
         } else {
@@ -214,7 +214,7 @@ public class Main {
     }
 
     static void viewStartedJoinedGames(InputOutput io, String username) {
-        List<Game> games = service.StartedGamesWithUser(username);
+        List<Game> games = service.getStartedGamesWithUser(username);
         if (games.isEmpty()) {
             io.writeLine("No games available.");
         } else {
