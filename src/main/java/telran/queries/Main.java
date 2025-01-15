@@ -87,16 +87,15 @@ public class Main {
             return;
         }
 
-        if(service.startGame(gameId, username)){
+        if(service.isGameEmpty(gameId, username)){
             io.writeLine("the game cannot be started, you must join it first");
-            return;
-        }
-
-        try {
-            service.startGame(gameId, username);
-            io.writeLine("Game with ID " + gameId + " has started.");
-        } catch (Exception e) {
-            io.writeLine("Error: " + e.getMessage());
+        } else{
+            try {
+                service.startGame(gameId, username);
+                io.writeLine("Game with ID " + gameId + " has started.");
+            } catch (Exception e) {
+                io.writeLine("Error: " + e.getMessage());
+            }
         }
     }
 
@@ -113,7 +112,7 @@ public class Main {
             return;
         }
 
-        if(!service.joinGame(gameId, username)){
+        if(service.isGameStarted(gameId)){
             io.writeLine("the game already started, you can not join");
             return;
         }

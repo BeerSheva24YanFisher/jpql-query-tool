@@ -25,32 +25,40 @@ public class BullsCowsServiceImpl implements BullsCowsService {
         Game game = new Game();
         game.setFinished(false);
         game.setSequence(generateSequence());
+        game.setDateTime(null);
         repository.saveGame(game);
         return game.getId();
     }
 
+
     @Override
-    public boolean startGame(long gameId, String username) {
-        Game game = repository.getGameById(gameId);
+    public boolean isGameEmpty(long gameId, String username){
         List<GameGamer> gameGamers = repository.getGameGamersByGameId(gameId);
-        boolean flag = false;
+        boolean flag = true;
         for (GameGamer gameGamer: gameGamers) {
-            if (gameGamer.getGamer().getUsername() ==username){
-                flag = true;
+            if (gameGamer.getGamer().getUsername() == username){
+                flag = false;
             }
             
         }
-
-        if (game != null && !game.isFinished() && gameGamers != null && flag) {
-            game.setDateTime(LocalDateTime.now());
-            repository.updateGame(game);
-        }
-
         return flag;
     }
 
+
+
     @Override
-    public boolean joinGame(long gameId, String username) {
+    public void startGame(long gameId, String username) {
+        Game game = repository.getGameById(gameId);
+        List<GameGamer> gameGamers = repository.getGameGamersByGameId(gameId);
+
+        if (game != null && !game.isFinished() && gameGamers != null) {
+            game.setDateTime(LocalDateTime.now());
+            repository.updateGame(game);
+        }
+    }
+
+    @Override
+    public void joinGame(long gameId, String username) {
         Game game = repository.getGameById(gameId);
         if (game != null && game.getDateTime()==null) {
             Gamer gamer = repository.getGamerByUsername(username);
@@ -59,8 +67,12 @@ public class BullsCowsServiceImpl implements BullsCowsService {
                 repository.saveGameGamer(new GameGamer(game, gamer));
             }
         }
+    }
 
+    public boolean isGameStarted(long gameId){
+        Game game = repository.getGameById(gameId);
         return game.getDateTime()!=null;
+
     }
 
     @Override

@@ -12,8 +12,10 @@ import telran.queries.service.BullsCowsService.MoveResult;
 
 public interface BullsCowsService {
     long createGame();
-    boolean startGame(long gameId, String username);
-    boolean joinGame(long gameId, String username);
+    boolean isGameEmpty(long gameId, String username);
+    void startGame(long gameId, String username);
+    void joinGame(long gameId, String username);
+    boolean isGameStarted(long gameId);
     MoveResult makeMove(long gameId, String username, String move);
     Game getGame(long gameId);
     List<Move> getMovesByGameId(long gameId);
@@ -23,7 +25,7 @@ public interface BullsCowsService {
     List<Game> getNotStartedGamesWithoutUser(String username);
     Gamer getUser(String username);
     void saveGamer(String username, LocalDate birthDate);
-    
+
     record MoveResult(int bulls, int cows, String sequence) {}
     
 }
