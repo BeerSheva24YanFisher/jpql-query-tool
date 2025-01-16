@@ -69,6 +69,7 @@ public class BullsCowsServiceImpl implements BullsCowsService {
         }
     }
 
+    @Override
     public boolean isGameStarted(long gameId){
         Game game = repository.getGameById(gameId);
         return game.getDateTime()!=null;
@@ -180,17 +181,5 @@ public class BullsCowsServiceImpl implements BullsCowsService {
     public Game getGame(long gameId){
         return repository.getGameById(gameId);
     }
-    
-    
-    
-
-
-
-    
-
-
-
-
-    
 
 }

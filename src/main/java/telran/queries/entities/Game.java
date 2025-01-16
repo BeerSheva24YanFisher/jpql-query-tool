@@ -1,6 +1,8 @@
 package telran.queries.entities;
 import java.time.LocalDateTime;
 
+import org.json.JSONObject;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -54,6 +56,30 @@ public class Game {
 
     public Game() {
     }
+
+    public Game(long id, LocalDateTime dateTime, boolean isFinished, String sequence) {
+        this.id = id;
+        this.dateTime = dateTime;
+        this.isFinished = isFinished;
+        this.sequence = sequence;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Game(JSONObject jsonObject) {
+        this.id = jsonObject.getLong("id");
+        this.dateTime = LocalDateTime.parse(jsonObject.getString("dateTime"));
+        this.isFinished = jsonObject.getBoolean("isFinished");
+        this.sequence = jsonObject.getString("sequence");
+    }
+
+    
+
+
+
+
 
 
 

@@ -43,7 +43,7 @@ public class Main {
 
 
 
-    private static Item[] getMainMenuItems(String username) {
+    private static Item[] getMenuItems(String username) {
         return new Item[] {
             Item.of("Create Game", Main::createGameWithRandomName),
             Item.of("Start Game", io -> startGame(io, username)),
@@ -247,7 +247,7 @@ public class Main {
             io.writeLine("User not found. Please register");
             return;
         }
-        Menu menu = new Menu("Bulls and Cows Game", getMainMenuItems(username));
+        Menu menu = new Menu("Bulls and Cows Game", getMenuItems(username));
         menu.perform(io);
     }
 }

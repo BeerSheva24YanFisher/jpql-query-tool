@@ -1,4 +1,6 @@
 package telran.queries.entities;
+import org.json.JSONObject;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -48,8 +50,20 @@ public void setSequence(String sequence) {
         this.gameGamer = gameGamer;
     }
 
+    public Move(long id, int bulls, int cows, String sequence, GameGamer gameGamer) {
+        this.id = id;
+        this.bulls = bulls;
+        this.cows = cows;
+        this.sequence = sequence;
+        this.gameGamer = gameGamer;
+    }
+
     public int getBulls() {
         return bulls;
+    }
+
+    public int getCows() {
+        return cows;
     }
 
     public GameGamer getGameGamer() {
@@ -63,16 +77,14 @@ public void setSequence(String sequence) {
     public Move() {
     }
 
-
-
-    
-
-    
-
-    
-
-
-
+    public Move(JSONObject jsonObject) {
+        this.id = jsonObject.getLong("id");
+        this.bulls = jsonObject.getInt("bulls");
+        this.cows = jsonObject.getInt("cows");
+        this.sequence = jsonObject.getString("sequence");
+        JSONObject gameGamerJson = jsonObject.getJSONObject("gameGamer");
+        this.gameGamer = new GameGamer(gameGamerJson);
+    }
 
 
 }

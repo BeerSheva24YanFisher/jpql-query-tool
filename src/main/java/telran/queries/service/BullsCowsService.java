@@ -3,6 +3,8 @@ package telran.queries.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import telran.queries.entities.Game;
 import telran.queries.entities.Gamer;
 import telran.queries.entities.Move;
@@ -26,6 +28,14 @@ public interface BullsCowsService {
     Gamer getUser(String username);
     void saveGamer(String username, LocalDate birthDate);
 
-    record MoveResult(int bulls, int cows, String sequence) {}
+    record MoveResult(int bulls, int cows, String sequence) {
+        public MoveResult(JSONObject jsonObject) {
+            this(
+                jsonObject.getInt("bulls"),
+                jsonObject.getInt("cows"),
+                jsonObject.getString("sequence")
+            );
+        }
+    }
     
 }

@@ -1,4 +1,6 @@
 package telran.queries.entities;
+import org.json.JSONObject;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +40,25 @@ public class GameGamer {
     public Gamer getGamer() {
         return gamer;
     }
+
+    public GameGamer(long id, Game game, Gamer gamer, boolean isWinner) {
+        this.id = id;
+        this.game = game;
+        this.gamer = gamer;
+        this.isWinner = isWinner;
+    }
+
+    public GameGamer(JSONObject jsonObject) {
+        this.id = jsonObject.getLong("id");
+        JSONObject gameJson = jsonObject.getJSONObject("game");
+        this.game = new Game(gameJson);
+        JSONObject gamerJson = jsonObject.getJSONObject("gamer");
+        this.gamer = new Gamer(gamerJson);
+        
+        this.isWinner = jsonObject.getBoolean("isWinner");
+    }
+
+
 
     
 

@@ -1,6 +1,8 @@
 package telran.queries.entities;
 import java.time.LocalDate;
 
+import org.json.JSONObject;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -39,6 +41,11 @@ public class Gamer {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Gamer(JSONObject jsonObject) {
+        this.username = jsonObject.getString("username");
+        this.birthdate = LocalDate.parse(jsonObject.getString("birthdate"));
     }
 
     
